@@ -67,7 +67,7 @@ cwhtml-project
 ### Template inheritance
 
 ```
-##extends './layout.tpl'##
+##extend './layout.tpl'##
 ```
 
 ### Sub template
