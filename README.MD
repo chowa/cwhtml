@@ -57,7 +57,7 @@ cwhtml-project
 |   |   |-- index.js
 |   |
 |   |-- style
-|   |   |-- index.less
+|   |   |-- index.less /* free choice css less sass */
 |   |
 |   |-- favicon.ico
 ```
