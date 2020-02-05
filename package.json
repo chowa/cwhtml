@@ -1,0 +1,46 @@
+{
+  "name": "cwhtml",
+  "version": "1.0.0",
+  "description": "Front-end modular development scaffolding",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src/*ts",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chowa/cwhtml.git"
+  },
+  "keywords": [
+    "frontend",
+    "scaffolding",
+    "inline-source",
+    "template",
+    "layout",
+    "sass",
+    "less"
+  ],
+  "author": "xuecong8226@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chowa/cwhtml/issues"
+  },
+  "homepage": "https://github.com/chowa/cwhtml#readme",
+  "dependencies": {
+    "browser-sync": "^2.26.7",
+    "chowa-log": "^1.0.2",
+    "commander": "^4.1.0",
+    "less": "^3.10.3",
+    "node-sass": "^4.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.0",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
+    "eslint-plugin-chowa-standard": "^1.0.9",
+    "gulp": "^4.0.2",
+    "gulp-banner": "^0.1.3",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "typescript": "^3.7.5"
+  }
+}
