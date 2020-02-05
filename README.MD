@@ -32,6 +32,7 @@ cwhtml dev
 
 ## Directory rules
 
+```
 cwhtml-project
 |
 |-- dist
@@ -59,7 +60,7 @@ cwhtml-project
 |   |   |-- index.less
 |   |
 |   |-- favicon.ico
-
+```
 
 ## Synatx
 
