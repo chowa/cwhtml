@@ -68,6 +68,8 @@ class template {
 
         this.script();
 
+        this.variable();
+
         return this.code;
     }
 
@@ -443,6 +445,16 @@ class template {
             const js = fs.readFileSync(file).toString();
 
             this.replace(node, `<scrpt type="text/javascript">!function(){\n${js}\n}()</script>`);
+        });
+    }
+
+    private variable() {
+        this.filter((node) => {
+            if (node.type !== 'var') {
+                return false;
+            }
+
+            this.replace(node, this.data[node.deps] || '');
         });
     }
 }

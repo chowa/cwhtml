@@ -39,7 +39,7 @@ cwhtml-project
 |
 |-- src
 |   |-- component
-|   |   |-- header /* include component will auto import style and js */
+|   |   |-- header /* auto import style and js */
 |   |   |   |-- index.tpl
 |   |   |   |-- index.scss
 |   |   |   |-- index.js
@@ -57,7 +57,7 @@ cwhtml-project
 |   |   |-- index.js
 |   |
 |   |-- style
-|   |   |-- index.less /* free choice css less sass */
+|   |   |-- index.scss /* free choice css sass */
 |   |
 |   |-- favicon.ico
 ```
@@ -67,7 +67,7 @@ cwhtml-project
 ### Template inheritance
 
 ```
-{{extend './layout.tpl'##
+{{extend './layout.tpl'}}
 ```
 
 ### Sub template
