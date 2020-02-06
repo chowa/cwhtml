@@ -30,11 +30,11 @@ export const mergeOpts = (customOpts: Options): Options => {
     const root = customOpts.root
         ? path.isAbsolute(customOpts.root)
             ? customOpts.root
-            : path.join(process.cwd(), customOpts.root)
+            : path.resolve(process.cwd(), customOpts.root)
         : options.mode;
     const output = customOpts.output
         ? path.isAbsolute(customOpts.output)
-            ? path.relative(root, customOpts.output)
+            ? path.resolve(root, customOpts.output)
             : customOpts.output
         : options.output;
     const minify = customOpts === 'production' ? true : false;

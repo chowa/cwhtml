@@ -1,6 +1,6 @@
 # cwhtml
 
-Front-end modular development scaffolding
+Small front-end engineering modular development scaffolding
 
 ## Install
 
@@ -45,7 +45,7 @@ cwhtml-project
 |   |   |   |-- index.js
 |   |
 |   |-- data /* page render data */
-|   |   |-- index.json
+|   |   |-- index.js
 |   |
 |   |-- image
 |   |   |-- banner.png
@@ -53,7 +53,7 @@ cwhtml-project
 |   |-- page /* entry */
 |   |   |-- index.tpl
 |   |   
-|   |-- js
+|   |-- script
 |   |   |-- index.js
 |   |
 |   |-- style
@@ -67,21 +67,23 @@ cwhtml-project
 ### Template inheritance
 
 ```
-##extend './layout.tpl'##
+{{extend './layout.tpl'##
 ```
 
 ### Sub template
 
+***auto include `src/component/header/*`***
+
 ```
-##include '../component/header'##
+{{include header}}
 ```
 
 ### Block inheritance
 
 ```
-##block 'content'##
+{{block 'content'}}
     <h1>sub conetnt</h1>
-##/block##
+{{/block}}
 ```
 
 ### Loop
@@ -89,47 +91,47 @@ cwhtml-project
 Key and item are keywords
 
 ```
-##each from=data##
-    <li data-key="##key##"> ##item.name##</li>
-##/each##
+{{each from=data}}
+    <li data-key="{{key}}"> {{item.name}}</li>
+{{/each}}
 ```
 
 ### Condition
 
+> does not support boolean
+
 ```
-##if a==1##
+{{if a=1}}
     <h1>true</h1>
-##else##
+#{{else}}
     <h2>false</h2>
-##/if##
+{{/if}}
+
+{{if c=case}}
+    <h1>case</h1>
+{{elseif c=which}}
+    <h2>which</h2>
+{{/if}}
 ```
 
 ### Variable
 
 ```
-##set a=1##
+{{set a=1}}
 
-##a##
+{{a}}
 ```
 
 ### Import style
 
-```
-##style '../style/index.less'##
-````
+> support css and sass
 
-***inline source***
 ```
-##style '../style/index.less?inline'##
+{{style '../style/index.scss'}}
 ````
 
 ### Import javascript
 
 ```
-##script '../js/index.js'##
-````
-
-***inline source***
-```
-##script '../js/index.js?inline'##
+{{script '../js/index.js'}}
 ````

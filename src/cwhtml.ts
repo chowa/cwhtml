@@ -1,24 +1,29 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as cwlog from 'chowa-log';
 import { Options, mergeOpts } from './options';
 import * as utils from './utils';
-import * as tpl from './template';
+import template from './template';
 
 function compilePage(file: string, opts: Options) {
     const { root, output, extname } = opts;
-    const orginPath = path.join(root, `page/${file}${extname}`);
-    const outPath = path.join(output, 'file.html');
+    const filePath = path.join(root, `page/${file}${extname}`);
+    const distPath = path.join(output, 'file.html');
 
-    if (!utils.isFile(orginPath)) {
-        return utils.remove(outPath);
+    if (!utils.isFile(filePath)) {
+        return utils.remove(filePath);
     }
 
-    const ast = tpl.parse(orginPath);
-    console.log(ast);
+    const html = new template(filePath).parser();
+
+    console.log(html);
 }
 
 function cwhtml(options: Options) {
     const opts = mergeOpts(options);
+
+    // create dist dir
+    utils.mkdir(opts.output);
 
     compilePage('index', opts);
 }
