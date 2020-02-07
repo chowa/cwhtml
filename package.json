@@ -32,11 +32,13 @@
     "commander": "^4.1.0",
     "del": "^5.1.0",
     "html-minifier": "^4.0.0",
+    "imagemin": "^7.0.1",
     "node-sass": "^4.13.1",
     "spritesmith": "^3.4.0"
   },
   "devDependencies": {
     "@types/html-minifier": "^3.5.3",
+    "@types/imagemin": "^7.0.0",
     "@types/node": "^13.7.0",
     "@types/node-sass": "^4.11.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
