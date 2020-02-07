@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as cwlog from 'chowa-log';
 import * as utils from './utils';
 import * as sassc from 'node-sass';
-
 export type TypeDeclare = 'extend' | 'block' | 'include' | 'if' | 'each' | 'set' | 'var' | 'style' | 'script';
 
 export interface Node {
@@ -408,7 +407,7 @@ class template {
                 css = sassc.renderSync({ data: css }).css.toString();
             }
 
-            return `<style type="text/style">\n${css.replace(/\.\.\/image/g, 'image')}\n</style>`;
+            return `<style type="text/css">\n${css.replace(/\.\.\/image/g, 'image')}\n</style>`;
         };
 
         this.filter((node) => {
@@ -444,7 +443,7 @@ class template {
 
             const js = fs.readFileSync(file).toString();
 
-            this.replace(node, `<scrpt type="text/javascript">!function(){\n${js}\n}()</script>`);
+            this.replace(node, `<script type="text/javascript">!function(){\n${js}\n}()</script>`);
         });
     }
 

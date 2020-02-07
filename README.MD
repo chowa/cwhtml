@@ -50,6 +50,10 @@ cwhtml-project
 |   |-- image
 |   |   |-- banner.png
 |   |
+|   |-- sprite
+|   |   |-- index
+|   |   |   |-- icon.png
+|   |
 |   |-- page /* entry */
 |   |   |-- index.tpl
 |   |   
