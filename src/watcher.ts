@@ -48,8 +48,10 @@ class Watcher {
                 else {
                     event = isDir ? 'removeDir' : 'removeFile';
 
-                    this.watchers[pathLike].close();
-                    delete this.watchers[pathLike];
+                    if (isDir) {
+                        this.watchers[pathLike].close();
+                        delete this.watchers[pathLike];
+                    }
                 }
             }
             else if (e === 'change') {
