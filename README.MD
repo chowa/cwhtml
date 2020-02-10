@@ -16,11 +16,10 @@ Small front-end engineering modular development scaffolding
 ```
 npm i cwhtml -g
 ```
+
 ## Usage
 
-
 ### create project
-
 
 ```
 cwhtml create <dir>
