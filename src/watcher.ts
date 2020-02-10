@@ -66,7 +66,7 @@ class Watcher {
         fs.readdirSync(root).forEach((filename) => {
             const childRoot = path.join(root, filename);
 
-            if (utils.isDir(childRoot)) {
+            if (utils.isDir(childRoot) && filename.indexOf('.') !== 0) {
                 this.watch(childRoot);
             }
         });
