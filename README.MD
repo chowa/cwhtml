@@ -1,6 +1,15 @@
+<p align="center">
+    <img src="http://upload.ouliu.net/i/20200210221643sqi62.png" width="240">
+</p>
+
 # cwhtml
 
 Small front-end engineering modular development scaffolding
+
+[![Build Status](https://travis-ci.org/chowa/cwhtml.svg?branch=master)](https://travis-ci.org/chowa/cwhtml)
+[![npm](https://img.shields.io/npm/v/cwhtml.svg)](https://www.npmjs.com/package/cwhtml)
+[![npm](https://img.shields.io/npm/dm/cwhtml.svg)](https://www.npmjs.com/package/cwhtml)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
 
 ## Install
 
