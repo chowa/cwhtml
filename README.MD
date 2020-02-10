@@ -158,3 +158,11 @@ Key and item are keywords
 ```
 {{script '../js/index.js'}}
 ````
+
+## Options
+
+```js
+    root: './src',
+    output: './dist'
+    extname: '.tpl'
+```

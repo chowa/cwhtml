@@ -11,10 +11,11 @@ export async function run(page: string, minifier: boolean) {
     const start = Date.now();
     const input = path.join(options.get('root'), `page/${page}${options.get('extname')}`);
     const dist = path.join(options.get('output'), `${page}.html`);
+    const tpl = new template(input);
 
     cwlog.info(`Compile ${page}`);
 
-    let html = new template(input).parser();
+    let html = tpl.parser();
 
     html = await sprite(input, html, options.get('output'));
 
@@ -69,11 +70,13 @@ export async function runAll(minifier = false) {
         process.exit();
     }
 
-    fs.readdirSync(pageDir).forEach(async (file) => {
+    const files = fs.readdirSync(pageDir);
+
+    for (const file of files) {
         const { name, ext } = path.parse(file);
 
         if (ext === options.get('extname')) {
             await run(name, minifier);
         }
-    });
+    }
 }

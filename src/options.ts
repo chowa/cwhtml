@@ -33,6 +33,14 @@ class Options {
     public get(option: keyof OptionsDetail): string {
         return this.storage[option];
     }
+
+    public all(): OptionsDetail {
+        return {
+            ...this.storage,
+            root: path.relative(process.cwd(), this.storage.root),
+            output: path.relative(process.cwd(), this.storage.output),
+        }
+    }
 }
 
 const options = new Options();
