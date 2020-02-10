@@ -36,7 +36,7 @@ class Watcher {
 
     private watch(root: string) {
         const watcher = fs.watch(root, (e, filename) => {
-            const isDir = !path.parse(filename).ext;
+            const isDir = !path.parse(filename).ext && filename.indexOf('.') !== 0;
             let event: WatchEvent;
             const pathLike = path.join(root, filename);
 
@@ -60,13 +60,12 @@ class Watcher {
 
             this.emit(event, pathLike);
         });
-
         this.watchers[root] = watcher;
 
         fs.readdirSync(root).forEach((filename) => {
             const childRoot = path.join(root, filename);
 
-            if (utils.isDir(childRoot) && filename.indexOf('.') !== 0) {
+            if (utils.isDir(childRoot)) {
                 this.watch(childRoot);
             }
         });

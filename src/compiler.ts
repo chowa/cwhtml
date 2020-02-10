@@ -45,7 +45,7 @@ export function image() {
             return;
         }
 
-        fs.copyFileSync(path.join(dir, file), path.join(options.get('output'), file));
+        fs.copyFileSync(path.join(dir, file), path.join(options.get('output'), `image/${file}`));
     });
 }
 

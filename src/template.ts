@@ -69,6 +69,8 @@ class Template {
 
         this.variable();
 
+        this.image();
+
         return this.code;
     }
 
@@ -260,16 +262,17 @@ class Template {
 
     private loadData() {
         const page = path.parse(this.file).name;
-        const jsData = utils.importPath(this.file, `../data/${page}.js`);
-        const jsonData = utils.importPath(this.file, `../data/${page}.json`);
+        const jsFile = utils.importPath(this.file, `../data/${page}.js`);
+        const jsonFile = utils.importPath(this.file, `../data/${page}.json`);
 
         this.data = {};
 
-        if (utils.isFile(jsData)) {
-            this.data = require(jsData);
+        if (utils.isFile(jsFile)) {
+            delete require.cache[jsFile];
+            this.data = require(jsFile);
         }
-        else if (utils.isFile(jsonData)) {
-            const json = fs.readFileSync(jsonData).toString();
+        else if (utils.isFile(jsonFile)) {
+            const json = fs.readFileSync(jsonFile).toString();
 
             try {
                 this.data = JSON.parse(json);
@@ -316,18 +319,29 @@ class Template {
             if (from && typeof from === 'object') {
                 let text = '';
 
-                Object.keys(from).forEach((key) => {
-                    const item = from[key];
-                    let tpl = node.content
-                        .replace(/{{key}}/g, key);
-
-                    Object.keys(item).forEach((property) => {
-                        tpl = tpl.replace(new RegExp(`{{item.${property}}}`, 'g'), utils.html2Escape(item[property]));
+                if (Array.isArray(from)) {
+                    from.forEach((item: string, key) => {
+                        text += node.content
+                            .replace(/{{key}}/g, key.toString())
+                            .replace(/{{item}}/g, item);
                     });
+                }
+                else {
+                    Object.keys(from).forEach((key) => {
+                        const item = from[key];
+                        let tpl = node.content
+                            .replace(/{{key}}/g, key);
 
-                    text += tpl;
-                });
+                        Object.keys(item).forEach((property) => {
+                            tpl = tpl.replace(
+                                new RegExp(`{{item.${property}}}`, 'g'),
+                                utils.html2Escape(item[property])
+                            );
+                        });
 
+                        text += tpl;
+                    });
+                }
 
                 this.replace(node, text);
             }
@@ -386,7 +400,7 @@ class Template {
 
             const fake = conditions.every(({ type, display, property, value }) => {
                 if (
-                    (type === 'value' && this.data[property].toString() === value)
+                    (type === 'value' && this.data[property] !== undefined && this.data[property].toString() === value)
                     || (type === 'latest')
                 ) {
                     this.replace(node, display);
@@ -407,7 +421,7 @@ class Template {
             let css = fs.readFileSync(file).toString();
             const { ext } = path.parse(file);
 
-            if (ext === '.scss') {
+            if (ext === '.scss' && css) {
                 css = sassc.renderSync({ data: css }).css.toString();
             }
 
@@ -434,6 +448,16 @@ class Template {
     }
 
     private script() {
+        const closure = (file: string) => {
+            const js = fs.readFileSync(file).toString();
+
+            if (!js) {
+                return '';
+            }
+
+            return `<script type="text/javascript">!function(){\n${js}\n}()</script>`;
+        };
+
         this.filter((node) => {
             if (node.type !== 'script') {
                 return false;
@@ -445,9 +469,11 @@ class Template {
                 return cwlog.error(`${file} does not exist`);
             }
 
-            const js = fs.readFileSync(file).toString();
+            this.replace(node, closure(file));
+        });
 
-            this.replace(node, `<script type="text/javascript">!function(){\n${js}\n}()</script>`);
+        this.includeScript.forEach((file) => {
+            this.append('body', closure(file));
         });
     }
 
@@ -459,6 +485,10 @@ class Template {
 
             this.replace(node, utils.html2Escape(this.data[node.deps] || ''));
         });
+    }
+
+    private image() {
+        this.code = this.code.replace(/\.\.\/image/g, 'image');
     }
 }
 

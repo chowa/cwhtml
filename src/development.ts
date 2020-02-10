@@ -21,6 +21,7 @@ class WatchDev {
         w.on('modifyFile', this.onFileUpdate.bind(this));
         w.on('addFile', this.onFileUpdate.bind(this));
         w.on('removeFile', this.onFileRmove.bind(this));
+        w.on('removeDir', this.onDirRemove.bind(this));
 
         setInterval(() => {}, 1 << 30); // eslint-disable-line
     }
@@ -31,6 +32,10 @@ class WatchDev {
         if (compiler.isPage(page)) {
             await compiler.run(page, false);
         }
+    }
+
+    private async onDirRemove() {
+        await compiler.runAll();
     }
 
     private async onFileRmove(file: string) {
@@ -47,6 +52,7 @@ class WatchDev {
 
             case 'script':
             case 'style':
+            case 'data':
                 if (compiler.isPage(name)) {
                     await compiler.run(name, false);
                 }
@@ -88,6 +94,7 @@ class WatchDev {
 
             case 'script':
             case 'style':
+            case 'data':
                 if (compiler.isPage(name)) {
                     await compiler.run(name, false);
                 }
