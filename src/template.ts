@@ -318,7 +318,7 @@ class template {
                         .replace(/{{key}}/g, key);
 
                     Object.keys(item).forEach((property) => {
-                        tpl = tpl.replace(new RegExp(`{{item.${property}}}`, 'g'), item[property]);
+                        tpl = tpl.replace(new RegExp(`{{item.${property}}}`, 'g'), utils.html2Escape(item[property]));
                     });
 
                     text += tpl;
@@ -453,7 +453,7 @@ class template {
                 return false;
             }
 
-            this.replace(node, this.data[node.deps] || '');
+            this.replace(node, utils.html2Escape(this.data[node.deps] || ''));
         });
     }
 }

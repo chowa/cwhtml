@@ -42,3 +42,14 @@ export function importPath(origin: string, dep: string) {
         base
     );
 }
+
+export function html2Escape(str: string) {
+    return str.replace(/[<>&"]/g, (c) => {
+        return {
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;',
+            '"':'&quot;'
+        }[c];
+    });
+}

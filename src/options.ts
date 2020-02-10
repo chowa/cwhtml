@@ -3,42 +3,32 @@ import * as utils from './utils';
 import * as cwlog from 'chowa-log';
 
 export interface Options {
-    mode?: 'development' | 'production';
     root?: string;
     output?: string;
-    minify?: boolean;
-    escape?: boolean;
     extname?: string;
 }
 
-const options: Options = {
-    mode: 'development',
+let options: Options = {
     root: path.join(process.cwd(), 'src'),
     output: path.join(process.cwd(), 'dist'),
-    minify: false,
-    escape: false,
     extname: '.tpl'
 };
 
-
-export const mergeOpts = (customOpts: Options): Options => {
+export const mergeOpts = (customOpts: Options) => {
     if (!customOpts) {
         return options;
     }
 
-    const mode = customOpts.mode || options.mode;
     const root = customOpts.root
         ? path.isAbsolute(customOpts.root)
             ? customOpts.root
             : path.resolve(process.cwd(), customOpts.root)
-        : options.mode;
+        : options.root;
     const output = customOpts.output
         ? path.isAbsolute(customOpts.output)
             ? path.resolve(root, customOpts.output)
             : customOpts.output
         : options.output;
-    const minify = customOpts === 'production' ? true : false;
-    const escape = customOpts === 'production' ? true : false;
     const extname = customOpts.extname || options.extname;
 
     if (!utils.isDir(root)) {
@@ -51,13 +41,13 @@ export const mergeOpts = (customOpts: Options): Options => {
         process.exit();
     }
 
-    return {
-        mode,
-        root,
-        output,
-        minify,
-        escape,
-        extname
+    options = {
+        ...options,
+        ...{
+            root,
+            output,
+            extname
+        }
     };
 };
 

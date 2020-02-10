@@ -52,7 +52,6 @@ async function sprite(file: string, html: string, output: string): Promise<strin
             );
 
             for (const icon in result.coordinates) {
-                console.log(icon, result.coordinates[icon]);
                 arr.push(
                     iconTpl.replace('{{icon}}', path.parse(icon).name)
                         .replace('{{width}}', (result.coordinates[icon].width / 2).toString())

@@ -1,15 +1,15 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as cwlog from 'chowa-log';
-import * as del from 'del';
 import { minify } from 'html-minifier';
-import { Options, mergeOpts } from './options';
+import options from './options';
 import * as utils from './utils';
 import template from './template';
 import sprite from './sprite';
 
-async function compile(file: string, opts: Options, minifier: boolean) {
-    const { root, output, extname } = opts;
+export async function run(file: string, minifier: boolean) {
+    let start = Date.now();
+    const { root, output, extname } = options;
     const input = path.join(root, `page/${file}${extname}`);
     const dist = path.join(output, `${file}.html`);
 
@@ -31,12 +31,13 @@ async function compile(file: string, opts: Options, minifier: boolean) {
     }
 
     fs.writeFileSync(dist, html);
+    cwlog.info(`write ${dist} used ${Date.now() - start}ms`);
 }
 
-function images(opts: Options) {
-    utils.mkdir(path.join(opts.output, 'image'));
+export function image() {
+    utils.mkdir(path.join(options.output, 'image'));
 
-    const dir = path.join(opts.root, 'image');
+    const dir = path.join(options.root, 'image');
 
     if (!utils.isDir(dir)) {
         return;
@@ -47,30 +48,28 @@ function images(opts: Options) {
             return;
         }
 
-        fs.copyFileSync(path.join(dir, file), path.join(opts.output, file));
+        fs.copyFileSync(path.join(dir, file), path.join(options.output, file));
     });
 }
 
-function favicon(opts: Options) {
-    const file = path.join(opts.root, 'favicon.ico');
+export function favicon() {
+    const file = path.join(options.root, 'favicon.ico');
 
     if (utils.isFile(file)) {
-        fs.copyFileSync(file, path.join(opts.output, 'favicon.ico'));
+        fs.copyFileSync(file, path.join(options.output, 'favicon.ico'));
     }
 }
 
-function cwhtml(options: Options, minifier = true) {
-    const opts = mergeOpts(options);
-
-    del.sync(options.output);
-
-    utils.mkdir(opts.output);
-
-    images(opts);
-
-    favicon(opts);
-
-    compile('index', opts, minifier);
+export function isPage(name: string): boolean {
+    return utils.isFile(path.join(options.root, `page/${name}.${options.extname}`));
 }
 
-export default cwhtml;
+export async function runAll() {
+    fs.readdirSync(path.join(options.root, 'page')).forEach(async (file) => {
+        const { name, ext } = path.parse(file);
+
+        if (ext === options.extname) {
+            await run(name, true);
+        }
+    });
+}
