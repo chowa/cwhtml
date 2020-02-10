@@ -105,7 +105,7 @@ cwhtml-project
 ### Block inheritance
 
 ```
-{{block 'content'}}
+{{block content}}
     <h1>sub conetnt</h1>
 {{/block}}
 ```
