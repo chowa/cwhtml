@@ -67,6 +67,7 @@ class Watcher {
             const childRoot = path.join(root, filename);
 
             if (utils.isDir(childRoot)) {
+                console.log(childRoot);
                 this.watch(childRoot);
             }
         });
