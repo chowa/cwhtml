@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as cwlog from 'chowa-log';
+import cwlog from 'chowa-log';
 
 export function isDir(str: string): boolean {
     return fs.existsSync(str) && fs.statSync(str).isDirectory();
@@ -49,7 +49,11 @@ export function html2Escape(str: string) {
             '<': '&lt;',
             '>': '&gt;',
             '&': '&amp;',
-            '"':'&quot;'
+            '"': '&quot;'
         }[c];
     });
+}
+
+export function isImg(file: string): boolean {
+    return ['.png', '.jpeg', '.jpg', '.gif'].includes(path.parse(file).ext);
 }

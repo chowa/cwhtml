@@ -28,7 +28,7 @@
   "homepage": "https://github.com/chowa/cwhtml#readme",
   "dependencies": {
     "browser-sync": "^2.26.7",
-    "chowa-log": "^1.0.2",
+    "chowa-log": "latest",
     "commander": "^4.1.0",
     "del": "^5.1.0",
     "html-minifier": "^4.0.0",
@@ -37,13 +37,14 @@
     "spritesmith": "^3.4.0"
   },
   "devDependencies": {
+    "@types/browser-sync": "^2.26.1",
     "@types/html-minifier": "^3.5.3",
     "@types/imagemin": "^7.0.0",
     "@types/node": "^13.7.0",
     "@types/node-sass": "^4.11.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
-    "eslint-plugin-chowa-standard": "^1.0.9",
+    "eslint-plugin-chowa-standard": "latest",
     "typescript": "^3.7.5"
   }
 }

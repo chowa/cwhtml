@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as utils from './utils';
+import options from './options';
 
 type WatchEvent = 'addFile' | 'removeFile' | 'modifyFile' | 'addDir' | 'removeDir' | 'modifyDir';
 
@@ -9,12 +10,16 @@ interface Listener {
     cb: (pathLike: string) => void;
 }
 
-class watcher {
+class Watcher {
 
     private listeners: Listener[] = [];
 
-    public constructor(cwd: string) {
-        this.watch(cwd);
+    private watchers: {
+        [ dir: string ]: fs.FSWatcher;
+    };
+
+    public constructor() {
+        this.watch(options.get('root'));
     }
 
     public on(event: WatchEvent, cb: (pathLike: string) => void) {
@@ -30,7 +35,7 @@ class watcher {
     }
 
     private watch(root: string) {
-        fs.watch(root, (e, filename) => {
+        const watcher = fs.watch(root, (e, filename) => {
             const isDir = !path.parse(filename).ext;
             let event: WatchEvent;
             const pathLike = path.join(root, filename);
@@ -42,14 +47,19 @@ class watcher {
                 }
                 else {
                     event = isDir ? 'removeDir' : 'removeFile';
+
+                    this.watchers[pathLike].close();
+                    delete this.watchers[pathLike];
                 }
             }
             else if (e === 'change') {
                 event = isDir ? 'modifyDir' : 'modifyFile';
             }
 
-            this.emit(event, pathLike)
+            this.emit(event, pathLike);
         });
+
+        this.watchers[root] = watcher;
 
         fs.readdirSync(root).forEach((filename) => {
             const childRoot = path.join(root, filename);
@@ -61,4 +71,4 @@ class watcher {
     }
 }
 
-export default watcher;
+export default Watcher;

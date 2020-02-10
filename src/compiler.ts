@@ -1,25 +1,22 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as cwlog from 'chowa-log';
+import cwlog from 'chowa-log';
 import { minify } from 'html-minifier';
 import options from './options';
 import * as utils from './utils';
 import template from './template';
 import sprite from './sprite';
 
-export async function run(file: string, minifier: boolean) {
-    let start = Date.now();
-    const { root, output, extname } = options;
-    const input = path.join(root, `page/${file}${extname}`);
-    const dist = path.join(output, `${file}.html`);
+export async function run(page: string, minifier: boolean) {
+    const start = Date.now();
+    const input = path.join(options.get('root'), `page/${page}${options.get('extname')}`);
+    const dist = path.join(options.get('output'), `${page}.html`);
 
-    if (!utils.isFile(input)) {
-        return utils.remove(dist);
-    }
+    cwlog.info(`Compile ${page}`);
 
     let html = new template(input).parser();
 
-    html = await sprite(input, html, output);
+    html = await sprite(input, html, options.get('output'));
 
     if (minifier) {
         html = minify(html, {
@@ -35,41 +32,41 @@ export async function run(file: string, minifier: boolean) {
 }
 
 export function image() {
-    utils.mkdir(path.join(options.output, 'image'));
+    utils.mkdir(path.join(options.get('output'), 'image'));
 
-    const dir = path.join(options.root, 'image');
+    const dir = path.join(options.get('root'), 'image');
 
     if (!utils.isDir(dir)) {
         return;
     }
 
     fs.readdirSync(dir).forEach((file) => {
-        if (!['.png', '.jpeg', '.jpg', 'gif'].includes(path.parse(file).ext)) {
+        if (!utils.isImg(file)) {
             return;
         }
 
-        fs.copyFileSync(path.join(dir, file), path.join(options.output, file));
+        fs.copyFileSync(path.join(dir, file), path.join(options.get('output'), file));
     });
 }
 
 export function favicon() {
-    const file = path.join(options.root, 'favicon.ico');
+    const file = path.join(options.get('root'), 'favicon.ico');
 
     if (utils.isFile(file)) {
-        fs.copyFileSync(file, path.join(options.output, 'favicon.ico'));
+        fs.copyFileSync(file, path.join(options.get('output'), 'favicon.ico'));
     }
 }
 
 export function isPage(name: string): boolean {
-    return utils.isFile(path.join(options.root, `page/${name}.${options.extname}`));
+    return utils.isFile(path.join(options.get('root'), `page/${name}${options.get('extname')}`));
 }
 
-export async function runAll() {
-    fs.readdirSync(path.join(options.root, 'page')).forEach(async (file) => {
+export async function runAll(minifier = false) {
+    fs.readdirSync(path.join(options.get('root'), 'page')).forEach(async (file) => {
         const { name, ext } = path.parse(file);
 
-        if (ext === options.extname) {
-            await run(name, true);
+        if (ext === options.get('extname')) {
+            await run(name, minifier);
         }
     });
 }

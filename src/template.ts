@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as cwlog from 'chowa-log';
+import cwlog from 'chowa-log';
 import * as utils from './utils';
 import * as sassc from 'node-sass';
 export type TypeDeclare = 'extend' | 'block' | 'include' | 'if' | 'each' | 'set' | 'var' | 'style' | 'script';
@@ -23,7 +23,7 @@ export interface Condition {
     value?: string;
 }
 
-class template {
+class Template {
 
     private file: string;
 
@@ -33,7 +33,7 @@ class template {
 
     private data: Data;
 
-    private test = /{{(\w*)[ ]*['|"]*([\.\/=\w\d]*)['|"]*}}/;
+    private test = /{{(\w*)[ ]*['|"]*([./=\w\d]*)['|"]*}}/;
 
     private includeStyle = [];
 
@@ -87,7 +87,7 @@ class template {
 
         let tag = tags.shift();
 
-        while(tag) {
+        while (tag) {
             const match = tag.match(new RegExp(this.test));
             const name = match[1].toLowerCase() as TypeDeclare;
             const wrap = [tag];
@@ -96,7 +96,22 @@ class template {
             let type: TypeDeclare = name;
             let content = '';
 
-            switch(name) {
+            const wrapComputed = () => {
+                const tagIndex = tags.findIndex((val) => {
+                    const closeMatch = val.match(/{{\/(\w+)[ ]*}}/);
+
+                    return closeMatch && closeMatch[1] === name ? true : false;
+                });
+                const closeTag = tags[tagIndex];
+                const tmpText = this.code.substring(this.code.indexOf(tag) + tag.length);
+                const closeIndex = tmpText.indexOf(closeTag);
+
+                content = tmpText.substring(0, closeIndex);
+                tags.splice(tagIndex, 1);
+                wrap.push(closeTag);
+            };
+
+            switch (name) {
                 case 'extend':
                 case 'include':
                 case 'set':
@@ -107,18 +122,7 @@ class template {
                 case 'block':
                 case 'if':
                 case 'each':
-                    const tagIndex = tags.findIndex((val) => {
-                        const closeMatch = val.match(/{{\/(\w+)[ ]*}}/);
-
-                        return closeMatch && closeMatch[1] === name ? true : false;
-                    });
-                    const closeTag = tags[tagIndex];
-                    const tmp_text = this.code.substring(this.code.indexOf(tag) + tag.length);
-                    const closeIndex = tmp_text.indexOf(closeTag);
-
-                    content = tmp_text.substring(0, closeIndex);
-                    tags.splice(tagIndex, 1);
-                    wrap.push(closeTag)
+                    wrapComputed();
                     break;
 
                 // 变量
@@ -131,7 +135,7 @@ class template {
                 cwlog.warning(`extend need on first line in ${this.file}`);
             }
 
-            tag = tags.shift()
+            tag = tags.shift();
 
             if (
                 type === 'var'
@@ -350,7 +354,7 @@ class template {
                     const valMatch = expMatch[1].match(/(\w+)=([\d\w]*)/);
 
                     if (valMatch) {
-                        conditions.push({ type: 'value', display, property: valMatch[1], value: valMatch[2]});
+                        conditions.push({ type: 'value', display, property: valMatch[1], value: valMatch[2] });
                     }
                     else {
                         cwlog.error(`does not support synatx ${expression}`);
@@ -458,4 +462,4 @@ class template {
     }
 }
 
-export default template;
+export default Template;

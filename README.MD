@@ -54,6 +54,9 @@ cwhtml-project
 |   |   |-- index
 |   |   |   |-- icon.png
 |   |
+|   |-- layout
+|   |   |-- common.tpl
+|   |
 |   |-- page /* entry */
 |   |   |-- index.tpl
 |   |   

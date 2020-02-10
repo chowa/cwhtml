@@ -2,11 +2,19 @@ import spritesmith from 'spritesmith';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as utils from './utils';
-import * as cwlog from 'chowa-log';
+import cwlog from 'chowa-log';
 
-const defineTpl = '.icon {display: inline-block;background-size: {{width}}px {{height}}px;background-image: url({{file}});}';
+const defineTpl = `.icon {
+    display: inline-block;
+    background-size: {{width}}px {{height}}px;
+    background-image: url({{file}});
+}`;
 
-const iconTpl = '.icon.{{icon}} {background-position: {{x}}px {{y}}px;width: {{width}}px;height: {{height}}px;}';
+const iconTpl = `.icon.{{icon}} {
+    background-position: {{x}}px {{y}}px;
+    width: {{width}}px;
+    height: {{height}}px;
+}`;
 
 interface Result {
     coordinates: {
@@ -63,6 +71,7 @@ async function sprite(file: string, html: string, output: string): Promise<strin
 
             fs.writeFileSync(path.join(output, `image/${name}-sprite.png`), result.image);
 
+            cwlog.info(`Generate ${name} page sprite`);
             resolve(html.replace('</head>', `<style type="text/css">${arr.join('')}</style>`));
         });
     });
