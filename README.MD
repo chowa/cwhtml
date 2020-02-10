@@ -9,6 +9,14 @@ npm i cwhtml -g
 ```
 ## Usage
 
+
+### create project
+
+
+```
+cwhtml create <dir>
+```
+
 ### build
 
 ```
