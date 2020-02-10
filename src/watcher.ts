@@ -16,7 +16,7 @@ class Watcher {
 
     private watchers: {
         [ dir: string ]: fs.FSWatcher;
-    };
+    } = {};
 
     public constructor() {
         this.watch(options.get('root'));

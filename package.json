@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Front-end modular development scaffolding",
   "main": "index.js",
+  "bin": {
+    "cwhtml": "bin/index.js"
+  },
   "scripts": {
     "lint": "eslint src/*ts",
     "build": "gulp"

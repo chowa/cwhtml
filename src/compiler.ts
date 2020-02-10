@@ -62,7 +62,14 @@ export function isPage(name: string): boolean {
 }
 
 export async function runAll(minifier = false) {
-    fs.readdirSync(path.join(options.get('root'), 'page')).forEach(async (file) => {
+    const pageDir = path.join(options.get('root'), 'page');
+
+    if (!utils.isDir(pageDir)) {
+        cwlog.error(`${pageDir} does not exists`);
+        process.exit();
+    }
+
+    fs.readdirSync(pageDir).forEach(async (file) => {
         const { name, ext } = path.parse(file);
 
         if (ext === options.get('extname')) {
