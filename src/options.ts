@@ -38,8 +38,8 @@ class Options {
         return {
             ...this.storage,
             root: path.relative(process.cwd(), this.storage.root),
-            output: path.relative(process.cwd(), this.storage.output),
-        }
+            output: path.relative(process.cwd(), this.storage.output)
+        };
     }
 }
 
