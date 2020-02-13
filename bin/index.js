@@ -10,7 +10,6 @@ const { execSync } = require('child_process');
 const packageJson = require('../package.json');
 const { build, development, options, utils } = require('../es');
 const { configFileName } = require('../es/config');
-const create = require('./create');
 
 function loadCustomOptions() {
     const configFilePath = path.join(process.cwd(), configFileName);
@@ -34,12 +33,11 @@ program
             execSync('git init', gitOpts);
             execSync('git remote add origin https://github.com/chowa/cwhtml-demo.git', gitOpts);
             execSync('git pull origin master', gitOpts);
+            del.sync(path.join(createDir, '.git'));
         } catch (e) {
             cwlog.error('Please make sure the creation directory is empty');
             process.exit();
         }
-
-        del.sync(path.join(createDir, '.git'));
 
         cwlog.info(`Generate a configuration file on ${configFileName}`);
         cwlog.warning('Configuration options detail on https://github.com/chowa/cwhtml#options');
