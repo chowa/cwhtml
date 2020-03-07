@@ -70,6 +70,10 @@ class WatchDev {
                 utils.remove(path.join(options.get('output'), `image/${base}`));
                 break;
 
+            case 'iconfont':
+                utils.remove(path.join(options.get('output'), `iconfont/${base}`));
+                break;
+
             case 'sprite':
                 if (utils.isImg(base)) {
                     await this.updateSprite(dir);

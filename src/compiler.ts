@@ -33,21 +33,11 @@ export async function run(page: string, minifier: boolean) {
 }
 
 export function image() {
-    utils.mkdir(path.join(options.get('output'), 'image'));
+    utils.copyToDist('image');
+}
 
-    const dir = path.join(options.get('root'), 'image');
-
-    if (!utils.isDir(dir)) {
-        return;
-    }
-
-    fs.readdirSync(dir).forEach((file) => {
-        if (!utils.isImg(file)) {
-            return;
-        }
-
-        fs.copyFileSync(path.join(dir, file), path.join(options.get('output'), `image/${file}`));
-    });
+export function iconfont() {
+    utils.copyToDist('iconfont');
 }
 
 export function favicon() {

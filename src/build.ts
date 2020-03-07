@@ -11,6 +11,8 @@ export default async function build(minifier = true) {
 
     compiler.image();
 
+    compiler.iconfont();
+
     compiler.favicon();
 
     await compiler.runAll(minifier);

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import cwlog from 'chowa-log';
+import options from './options';
 
 export function isDir(str: string): boolean {
     return fs.existsSync(str) && fs.statSync(str).isDirectory();
@@ -56,4 +57,22 @@ export function html2Escape(str: string) {
 
 export function isImg(file: string): boolean {
     return ['.png', '.jpeg', '.jpg', '.gif'].includes(path.parse(file).ext);
+}
+
+export function copyToDist(module: string) {
+    mkdir(path.join(options.get('output'), module));
+
+    const dir = path.join(options.get('root'), module);
+
+    if (!isDir(dir)) {
+        return;
+    }
+
+    fs.readdirSync(dir).forEach((file) => {
+        if (!isImg(file)) {
+            return;
+        }
+
+        fs.copyFileSync(path.join(dir, file), path.join(options.get('output'), `${module}/${file}`));
+    });
 }
