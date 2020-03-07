@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import cwlog from 'chowa-log';
 import * as utils from './utils';
-import * as sassc from 'node-sass';
+import * as sass from 'node-sass';
+import * as less from 'less';
 export type TypeDeclare = 'extend' | 'block' | 'include' | 'if' | 'each' | 'set' | 'var' | 'style' | 'script';
 
 export interface Node {
@@ -421,8 +422,22 @@ class Template {
             let css = fs.readFileSync(file).toString();
             const { ext } = path.parse(file);
 
-            if (ext === '.scss' && css) {
-                css = sassc.renderSync({ data: css }).css.toString();
+            if (!css) {
+                return '';
+            }
+
+            if (ext === '.scss') {
+                css = sass.renderSync({ data: css }).css.toString();
+            }
+            else if (ext === '.less') {
+                less.render(css)
+                    .then((output) => {
+                        css = output.css;
+                    })
+                    .catch((reason) => {
+                        css = '';
+                        cwlog.error(reason);
+                    });
             }
 
             return `<style type="text/css">\n${css.replace(/\.\.\/image/g, 'image')}\n</style>`;
