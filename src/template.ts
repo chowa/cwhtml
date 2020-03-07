@@ -440,7 +440,12 @@ class Template {
                     });
             }
 
-            return `<style type="text/css">\n${css.replace(/\.\.\/image/g, 'image')}\n</style>`;
+            // 图片路径，直接到dist/image
+            css = css.replace(/\.\.\/image/g, 'image');
+            // iconfont，目前只配合cwfont
+            css = css.replace(/\.\.\/iconfont/g, 'iconfont');
+
+            return `<style type="text/css">\n${css}\n</style>`;
         };
 
         this.filter((node) => {

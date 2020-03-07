@@ -80,7 +80,13 @@ cwhtml-project
 |   |   |-- index.js
 |   |
 |   |-- style
-|   |   |-- index.scss /* free choice css sass */
+|   |   |-- index.scss /* free choice css sass less */
+|   |
+|   |-- iconfont
+|   |   |-- font.eot
+|   |   |-- font.woff
+|   |   |-- font.woff2
+|   |   |-- font.svg
 |   |
 |   |-- favicon.ico
 ```
@@ -147,7 +153,7 @@ Key and item are keywords
 
 ### Import style
 
-> support css and sass
+> support css sass less
 
 ```
 {{style '../style/index.scss'}}
